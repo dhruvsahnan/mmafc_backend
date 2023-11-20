@@ -38,7 +38,7 @@ def submit_job_run_request():
     }
     response = requests.request(method="POST", headers=HEADERS, url=SUBMIT_JOB_RUN_API_ENDPOINT, json=data_json)
 
-    return response.json()
+    return _corsify_actual_response(jsonify(response.json()))
 
 @app.route('/')
 def hello_world():
