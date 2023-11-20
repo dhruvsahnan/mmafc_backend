@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import requests
 import os
 app = Flask(__name__)
@@ -14,6 +14,10 @@ HEADERS = {
 RUN_OUTPUT_API_ENDPOINT = HOST_URL+"api/2.0/jobs/runs/get-output"
 SUBMIT_JOB_RUN_API_ENDPOINT = HOST_URL+"api/2.0/jobs/run-now"
 
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
 @app.route('/get_run_output', methods = ['GET'])
 def get_run_output_request():
     run_id = request.args['run_id']
@@ -23,7 +27,7 @@ def get_run_output_request():
     }
     
     response = requests.request(method="GET", headers=HEADERS, url=RUN_OUTPUT_API_ENDPOINT, json=data_json)
-    return response.json()
+    return _corsify_actual_response(jsonify(response.json()))
 
 @app.route('/submit_job_run', methods = ['POST'])
 def submit_job_run_request():
