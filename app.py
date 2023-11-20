@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 import requests
 import os
 app = Flask(__name__)
@@ -13,6 +13,13 @@ HEADERS = {
 
 RUN_OUTPUT_API_ENDPOINT = HOST_URL+"api/2.0/jobs/runs/get-output"
 SUBMIT_JOB_RUN_API_ENDPOINT = HOST_URL+"api/2.0/jobs/run-now"
+
+def _build_cors_preflight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Headers', "*")
+    response.headers.add('Access-Control-Allow-Methods', "*")
+    return response
 
 def _corsify_actual_response(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
@@ -29,16 +36,19 @@ def get_run_output_request():
     response = requests.request(method="GET", headers=HEADERS, url=RUN_OUTPUT_API_ENDPOINT, json=data_json)
     return _corsify_actual_response(jsonify(response.json()))
 
-@app.route('/submit_job_run', methods = ['POST'])
+@app.route('/submit_job_run', methods = ['POST', "OPTIONS"])
 def submit_job_run_request():
-    req_json = request.json
-    data_json = {
-        "job_id" : req_json['job_id'],
-        "notebook_params" : req_json['notebook_input']
-    }
-    response = requests.request(method="POST", headers=HEADERS, url=SUBMIT_JOB_RUN_API_ENDPOINT, json=data_json)
+    if request.method == "OPTIONS": # CORS preflight
+        return _build_cors_preflight_response()
+    elif request.method == "POST":
+        req_json = request.json
+        data_json = {
+            "job_id" : req_json['job_id'],
+            "notebook_params" : req_json['notebook_input']
+        }
+        response = requests.request(method="POST", headers=HEADERS, url=SUBMIT_JOB_RUN_API_ENDPOINT, json=data_json)
 
-    return _corsify_actual_response(jsonify(response.json()))
+        return _corsify_actual_response(jsonify(response.json()))
 
 @app.route('/')
 def hello_world():
