@@ -3,8 +3,15 @@ import requests
 import os
 app = Flask(__name__)
 
-DB_PERSONAL_ACCESS_TOKEN = os.getenv('db_pat')
-HOST_URL = os.getenv('db_url')
+# DB_PERSONAL_ACCESS_TOKEN = os.getenv('db_pat')
+# HOST_URL = os.getenv('db_url')
+# SEARCH_JOB_ID = os.getenv('db_search_job')
+# ANALYSIS_JOB_ID = os.getenv('db_analysis_job')
+
+DB_PERSONAL_ACCESS_TOKEN = "dapi4f28951dddcde2d9fed9c564fdd9d2b9"
+HOST_URL = "https://7798644223489409.9.gcp.databricks.com/"
+SEARCH_JOB_ID = "431843354010410"
+ANALYSIS_JOB_ID = "740795541882406"
 
 HEADERS = {
     "Authorization": f"Bearer {DB_PERSONAL_ACCESS_TOKEN}",
@@ -13,6 +20,7 @@ HEADERS = {
 
 RUN_OUTPUT_API_ENDPOINT = HOST_URL+"api/2.0/jobs/runs/get-output"
 SUBMIT_JOB_RUN_API_ENDPOINT = HOST_URL+"api/2.0/jobs/run-now"
+ALL_RUNS_API_ENDPOINT = HOST_URL+"api/2.1/jobs/runs/list"
 
 def _build_cors_preflight_response():
     response = make_response()
@@ -24,6 +32,42 @@ def _build_cors_preflight_response():
 def _corsify_actual_response(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
+
+@app.route('/')
+def hello_world():
+    return 'Basic MMAFC Backend'
+
+@app.route('/get_all_runs', methods = ['GET'])
+def get_all_runs_request():
+    search_response = requests.request(method='GET', headers=HEADERS, url=ALL_RUNS_API_ENDPOINT, json={"job_id":SEARCH_JOB_ID, "limit":25})
+    analysis_response = requests.request(method='GET', headers=HEADERS, url=ALL_RUNS_API_ENDPOINT, json={"job_id":ANALYSIS_JOB_ID, "limit":25})
+
+    search_run_output = {}
+    for run in search_response.json().get('runs', []):
+        search_run_output[run['run_id']] = {
+            'job_id': run['job_id'],
+            'username': "Logically.AI",
+            'search_parameters': run['overriding_parameters'],
+            'run_id': run['run_id'],
+            'state': run['state']
+        }
+
+    analysis_run_output = {}
+    for run in analysis_response.json().get('runs', []):
+        analysis_run_output[run['run_id']] = {
+            'job_id': run['job_id'],
+            'username': "Logically.AI",
+            'parameters': run['overriding_parameters'],
+            'run_id': run['run_id'],
+            'state': run['state']
+        }
+
+    output = {
+        'search_runs': search_run_output,
+        'analysis_runs': analysis_run_output
+    }
+    return _corsify_actual_response(jsonify(output))
+
 
 @app.route('/get_run_output', methods = ['GET'])
 def get_run_output_request():
@@ -38,7 +82,7 @@ def get_run_output_request():
 
 @app.route('/submit_job_run', methods = ['POST', "OPTIONS"])
 def submit_job_run_request():
-    if request.method == "OPTIONS": # CORS preflight
+    if request.method == "OPTIONS":
         return _build_cors_preflight_response()
     elif request.method == "POST":
         req_json = request.json
@@ -49,7 +93,3 @@ def submit_job_run_request():
         response = requests.request(method="POST", headers=HEADERS, url=SUBMIT_JOB_RUN_API_ENDPOINT, json=data_json)
 
         return _corsify_actual_response(jsonify(response.json()))
-
-@app.route('/')
-def hello_world():
-    return 'Basic MMAFC Backend'
