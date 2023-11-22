@@ -47,7 +47,8 @@ def get_all_runs_request():
         search_run_output[run['run_id']] = {
             'job_id': run['job_id'],
             'username': "Logically.AI",
-            'search_parameters': run['overriding_parameters'],
+            'parameters': run['overriding_parameters'],
+            'start_time': run['start_time'],
             'run_id': run['run_id'],
             'state': run['state']
         }
@@ -58,6 +59,7 @@ def get_all_runs_request():
             'job_id': run['job_id'],
             'username': "Logically.AI",
             'parameters': run['overriding_parameters'],
+            'start_time': run['start_time'],
             'run_id': run['run_id'],
             'state': run['state']
         }
