@@ -134,12 +134,12 @@ JSON_RESPONSE = {
 ```
 The ANALYSIS_RUN_ID (run_id) must be stored somewhere to fetch analysis job output.
 
-### Fetch search job run output
+### Fetch analysis job run output
 
-To fetch results for the search job, make a GET request at the `URL_FETCH_RUN_OUTPUT` endpoint, with the following params:
-`run_id = <SEARCH_RUN_ID>`
+To fetch results for the analysis job, make a GET request at the `URL_FETCH_RUN_OUTPUT` endpoint, with the following params:
+`run_id = <ANALYSIS_RUN_ID>`
 
-Thus, the URL essentially becomes -> `https://mmafc-backend.onrender.com/get_run_output?run_id=<SEARCH_RUN_ID>`.
+Thus, the URL essentially becomes -> `https://mmafc-backend.onrender.com/get_run_output?run_id=<ANALYSIS_RUN_ID>`.
 
 The response returned is as follows (when the analysis job has completed ):
 ```
@@ -183,7 +183,7 @@ JSON_RESPONSE = {
   }
 }
 ```
-In case the search job is still running, the response returned is as follows:
+In case the analysis job is still running, the response returned is as follows:
 ```
 JSON_RESPONSE = {
   'metadata': {
