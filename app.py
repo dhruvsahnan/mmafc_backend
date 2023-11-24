@@ -91,7 +91,7 @@ def submit_job_run_request():
         if req_json['job_id'] == '740795541882406':
             analysis_response = requests.request(method='GET', headers=HEADERS, url=ALL_RUNS_API_ENDPOINT, json={"job_id":ANALYSIS_JOB_ID, "limit":25})
             for run in analysis_response.json()['runs']:
-                if run['overriding_parameters']['notebook_params']['search_run_id'] == req_json['notebook_input']['search_run_id']:
+                if str(run['overriding_parameters']['notebook_params']['search_run_id']) == str(req_json['notebook_input']['search_run_id']):
                     data_json = {
                         'run_id': run['run_id']
                     }
