@@ -72,19 +72,24 @@ JSON_RESPONSE = {
     ...
   },
   'notebook_output': {
-    'result': {
-      'index': {key:value pairs in the form of ROW_NUMBER: <index in dataframe>},
-      'search_type': {key:value pairs in the form of ROW_NUMBER: <search type of the result, may be hashtags, usernames, urls or keywords>},
-      'search_input': {key:value pairs in the form of ROW_NUMBER: <search input/word of the result>},
-      'video_link': {key:value pairs in the form of ROW_NUMBER: <link of the video in the form of https://www.tiktok.com/@<username>/video/<video_id>},
-      'username': {key:value pairs in the form of ROW_NUMBER: <username of the account that posted the video>},
-      'description': {key:value pairs in the form of ROW_NUMBER: <description of the video as written by the user>},
-      'views': {key:value pairs in the form of ROW_NUMBER: <number of views on the video>},
-      'likes': {key:value pairs in the form of ROW_NUMBER: <number of likes on the video>},
-      'shares': {key:value pairs in the form of ROW_NUMBER: <number of shares on the video>},
-      'comments': {key:value pairs in the form of ROW_NUMBER: <number of comments on the video>},
-      'creation_time': {key:value pairs in the form of ROW_NUMBER: <creation time of the video>}
-    },
+    'result': [
+      {
+        'index': , 
+        'search_type': , 
+        'source': , 
+        'search_input': , 
+        'video_link': , 
+        'posted_by': , 
+        'title': , 
+        'description': , 
+        'view_count': , 
+        'like_count': , 
+        'share_count': , 
+        'comment_count': , 
+        'creation_time': 'YYYY-MM-DD hh:mm:ss', 
+        'thumbnail_url': 
+      }, ... similar items
+    ],
     'truncated': ...
   }
 }
@@ -162,25 +167,32 @@ JSON_RESPONSE = {
     ...
   },
   'notebook_output': {
-    'result': {
-      'index': {key:value pairs in the form of ROW_NUMBER: <index in dataframe>},
-      'search_type': {key:value pairs in the form of ROW_NUMBER: <search type of the result, may be hashtags, usernames, urls or keywords>},
-      'search_input': {key:value pairs in the form of ROW_NUMBER: <search input/word of the result>},
-      'video_link': {key:value pairs in the form of ROW_NUMBER: <link of the video in the form of https://www.tiktok.com/@<username>/video/<video_id>},
-      'username': {key:value pairs in the form of ROW_NUMBER: <username of the account that posted the video>},
-      'description': {key:value pairs in the form of ROW_NUMBER: <description of the video as written by the user>},
-      'views': {key:value pairs in the form of ROW_NUMBER: <number of views on the video>},
-      'likes': {key:value pairs in the form of ROW_NUMBER: <number of likes on the video>},
-      'shares': {key:value pairs in the form of ROW_NUMBER: <number of shares on the video>},
-      'comments': {key:value pairs in the form of ROW_NUMBER: <number of comments on the video>},
-      'creation_time': {key:value pairs in the form of ROW_NUMBER: <creation time of the video>},
-      'transcript': {key:value pairs in the form of ROW_NUMBER: <transcript of the audio>},
-      'extracted_fcw_claims': {key:value pairs in the form of ROW_NUMBER: <list of FCW claims>},
-      'fcw_scores': {key:value pairs in the form of ROW_NUMBER: <list of scores corresponding to FCW claims>},
-      'average_fcw_score': {key:value pairs in the form of ROW_NUMBER: <average FCW score from the list in 'fcw_scores'>},
-      'maximum_fcw_score': {key:value pairs in the form of ROW_NUMBER: <maximum FCW score from the list in 'fcw_scores'>},
-      'sum_fcw_score': {key:value pairs in the form of ROW_NUMBER: <sum of FCW scores from the list in 'fcw_scores'>}
-    },
+    'result': [
+      {
+        'index': , 
+        'search_type': , 
+        'source': , 
+        'search_input': , 
+        'video_link': , 
+        'posted_by': , 
+        'title': , 
+        'description': , 
+        'view_count': , 
+        'like_count': , 
+        'share_count': , 
+        'comment_count': , 
+        'creation_time': 'YYYY-MM-DD hh:mm:ss', 
+        'thumbnail_url': ,
+        'transcript': , 
+        'extracted_FCW_claims': , 
+        'FCW_scores': , 
+        'average_FCW_score': , 
+        'maximum_FCW_score': , 
+        'sum_FCW_score': , 
+        'transcription_timestamps': , 
+        'claims_timestamps': 
+      }, ... similar items
+    ]
     'truncated': ...
   }
 }
