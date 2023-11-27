@@ -22,10 +22,12 @@ To submit a search job using user input, make a POST request at the `URL_SUBMIT_
 JSON_DATA = {
     "job_id" : str(SEARCH_JOB_ID),
     "notebook_params" : {
-        "hashtags": <comma separated values>,
-        "keywords": <comma separated values>,
-        "usernames": <comma separated values>,
-        "urls": <comma separated values where each url must be in the form of tiktok.com/@<username>/video/<video_id> >
+        "hashtags_tiktok": <comma separated values>,
+        "keywords_tiktok": <comma separated values>,
+        "usernames_tiktok": <comma separated values>,
+        "urls_tiktok": <comma separated values where each url must be in the form of tiktok.com/@<username>/video/<video_id> >,
+        "keywords_yt": <comma separated values>,
+        "urls_yt": <comma separated values where each url must be in the form of youtube.com/shorts/<video_id> >,
         "start_date": "YYYY-MM-DD",
         "end_date": "YYYY-MM-DD",
         "test_flag": "True"
