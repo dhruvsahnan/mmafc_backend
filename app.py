@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 import requests
 import os
+import json
 app = Flask(__name__)
 
 # DB_PERSONAL_ACCESS_TOKEN = os.getenv('db_pat')
@@ -83,8 +84,8 @@ def get_run_output_request():
 
     json_resp = response.json()
     if 'notebook_output' in json_resp:
-        if 'results' in json_resp['notebook_output']:
-            json_resp['notebook_output']['results'] = eval(json_resp['notebook_output']['results'])
+        if 'result' in json_resp['notebook_output']:
+            json_resp['notebook_output']['result'] = eval(json_resp['notebook_output']['result'])
     return _corsify_actual_response(jsonify(json_resp))
 
 @app.route('/submit_job_run', methods = ['POST', "OPTIONS"])
