@@ -80,7 +80,12 @@ def get_run_output_request():
     }
     
     response = requests.request(method="GET", headers=HEADERS, url=RUN_OUTPUT_API_ENDPOINT, json=data_json)
-    return _corsify_actual_response(jsonify(response.json()))
+
+    json_resp = response.json()
+    if 'notebook_output' in json_resp:
+        if 'results' in json_resp['notebook_output']:
+            json_resp['notebook_output']['results'] = eval(json_resp['notebook_output']['results'])
+    return _corsify_actual_response(jsonify(json_resp))
 
 @app.route('/submit_job_run', methods = ['POST', "OPTIONS"])
 def submit_job_run_request():
