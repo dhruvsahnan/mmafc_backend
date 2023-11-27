@@ -47,7 +47,7 @@ def get_all_runs_request():
         search_run_output[run['run_id']] = {
             'job_id': run['job_id'],
             'username': "Logically.AI",
-            'parameters': run['overriding_parameters'],
+            'parameters': run.get('overriding_parameters', {}),
             'start_time': run['start_time'],
             'run_id': run['run_id'],
             'state': run['state']
@@ -58,7 +58,7 @@ def get_all_runs_request():
         analysis_run_output[run['run_id']] = {
             'job_id': run['job_id'],
             'username': "Logically.AI",
-            'parameters': run['overriding_parameters'],
+            'parameters': run.get('overriding_parameters', {}),
             'start_time': run['start_time'],
             'run_id': run['run_id'],
             'state': run['state']
@@ -98,10 +98,10 @@ def submit_job_run_request():
             for run in analysis_response.json()['runs']:
                 if str(run['overriding_parameters']['notebook_params']['search_run_id']) == str(req_json['notebook_input']['search_run_id']):
                     data_json = {
-                        'run_id': run['run_id']
+                        'run_id': run['run_id'],
+                        'number_in_jobs': run['run_id']
                     }
-                    response = requests.request(method="GET", headers=HEADERS, url=RUN_OUTPUT_API_ENDPOINT, json=data_json)
-                    return _corsify_actual_response(jsonify(response.json()))
+                    return _corsify_actual_response(jsonify(data_json))
         data_json = {
             "job_id" : req_json['job_id'],
             "notebook_params" : req_json['notebook_input']
