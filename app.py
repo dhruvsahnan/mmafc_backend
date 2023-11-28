@@ -4,13 +4,13 @@ import os
 import json
 app = Flask(__name__)
 
-# DB_PERSONAL_ACCESS_TOKEN = os.getenv('db_pat')
-# HOST_URL = os.getenv('db_url')
+DB_PERSONAL_ACCESS_TOKEN = os.getenv('db_pat')
+HOST_URL = os.getenv('db_url')
 # SEARCH_JOB_ID = os.getenv('db_search_job')
 # ANALYSIS_JOB_ID = os.getenv('db_analysis_job')
 
-DB_PERSONAL_ACCESS_TOKEN = "dapi4f28951dddcde2d9fed9c564fdd9d2b9"
-HOST_URL = "https://7798644223489409.9.gcp.databricks.com/"
+# DB_PERSONAL_ACCESS_TOKEN = "dapi4f28951dddcde2d9fed9c564fdd9d2b9"
+# HOST_URL = "https://7798644223489409.9.gcp.databricks.com/"
 SEARCH_JOB_ID = "431843354010410"
 ANALYSIS_JOB_ID = "740795541882406"
 
