@@ -85,7 +85,7 @@ def get_run_output_request():
     json_resp = response.json()
     if 'notebook_output' in json_resp:
         if 'result' in json_resp['notebook_output']:
-            nan = float('nan')
+            nan = ''
             json_resp['notebook_output']['result'] = eval(json_resp['notebook_output']['result'])
     return _corsify_actual_response(jsonify(json_resp))
 
