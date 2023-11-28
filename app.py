@@ -32,6 +32,7 @@ def _build_cors_preflight_response():
 
 def _corsify_actual_response(response):
     response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Content-Type", "application/json")
     return response
 
 @app.route('/')
