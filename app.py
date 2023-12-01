@@ -36,6 +36,12 @@ def _corsify_actual_response(response):
     response.headers.add("Content-Type", "application/json")
     return response
 
+def get_params_if_run_on_DB(job_params):
+    parameters = {'notebook_params': {}}
+    for i in job_params:
+        parameters['notebook_params'][i['name']] = i['value']
+    return parameters
+
 @app.route('/')
 def hello_world():
     return 'Basic MMAFC Backend'
@@ -44,13 +50,12 @@ def hello_world():
 def get_all_runs_request():
     search_response = requests.request(method='GET', headers=HEADERS, url=ALL_RUNS_API_ENDPOINT, json={"job_id":SEARCH_JOB_ID, "limit":25})
     analysis_response = requests.request(method='GET', headers=HEADERS, url=ALL_RUNS_API_ENDPOINT, json={"job_id":ANALYSIS_JOB_ID, "limit":25})
-
     search_run_output = {}
     for run in search_response.json().get('runs', []):
         search_run_output[run['run_id']] = {
             'job_id': run['job_id'],
             'username': "Logically.AI",
-            'parameters': run.get('overriding_parameters', {}),
+            'parameters': run.get('overriding_parameters', get_params_if_run_on_DB(run.get('job_parameters', []))),
             'start_time': run['start_time'],
             'run_id': run['run_id'],
             'state': run['state']
@@ -61,7 +66,7 @@ def get_all_runs_request():
         analysis_run_output[run['run_id']] = {
             'job_id': run['job_id'],
             'username': "Logically.AI",
-            'parameters': run.get('overriding_parameters', {}),
+            'parameters': run.get('overriding_parameters', get_params_if_run_on_DB(run.get('job_parameters', []))),
             'start_time': run['start_time'],
             'run_id': run['run_id'],
             'state': run['state']
@@ -71,6 +76,13 @@ def get_all_runs_request():
         'search_runs': search_run_output,
         'analysis_runs': analysis_run_output
     }
+
+    # output_1 = {'job_id': 1065336331418383, 'run_id': 26140641423741, 'creator_user_name': 'dhruv.s@logically.ai', 'number_in_job': 26140641423741, 'original_attempt_run_id': 26140641423741, 'state': {'life_cycle_state': 'TERMINATED', 'result_state': 'SUCCESS', 'state_message': '', 'user_cancelled_or_timedout': False}, 'start_time': 1701407807030, 'setup_duration': 0, 'execution_duration': 0, 'cleanup_duration': 0, 'end_time': 1701410873445, 'run_duration': 3066415, 'trigger': 'ONE_TIME', 'run_name': 'MMAFC Short Video Search DEMO', 'run_page_url': 'https://7798644223489409.9.gcp.databricks.com/?o=7798644223489409#job/1065336331418383/run/26140641423741', 'run_type': 'JOB_RUN', 'format': 'MULTI_TASK', 'job_parameters': [{'name': 'end_date', 'default': '', 'value': '2023-11-25'}, {'name': 'hashtags_tiktok', 'default': '', 'value': '#pallywood,#israhell,#IsraelUnderAttack,#IStandWithIsrael,#IsraelPalestineWar,#Israel_under_attack,#IndiaStandsWithIsrael,#hamasattack,#Gaza_Genocide,#Gazabombing,#gazagenocide,#palestinegenocide,#israelpalestineconflict,#gaza_under_attack,#gazaunderattack,#gazaattack,#freegaza,#hamasterrorists,#palestineunderattack,#israelinewnazism,#israelgazawar,#israelterrorists,#hamasmassacre,#gazahospital,#israelfightsback,#gazacity,#zionistterror,#hamasterrorism,#isrealpalestineconflict,#standwithisrael,#irondome,#gazzeunderattack,#hamasisis,#israelatwar,#palestiniangenocide,#istandwithpalestine,#mossad,#palestinalibre,#StopBombingHospitals,#IsrealiNewNazism,#alaqsaflood,#gazabombing,#israeliwarcrimes,#palestinelivesmatter,#freepalaestine,#idf,#indiastandswithisrael,#hamas_is_isis,#hamaswarcrimes,#commandcenter,#indiawithisrael,#iraniansstandwithisrael,#filistin,#palestinewillbefree,#irgcterrorists,#lfi,#sondakika,#Gazzeoluyor,#almayadeen,#israelundefire,#OperationIronSwords,#isrealvspalastine,#israeliairforce,#falestine,#AlAqsaStorm,#AlAqsaCallsArmies,#israeloccupationofpalestine,#ironbeam,#irondomeisrael,#NoOilForIsrael,#hamas_is_isis,#hamas,#israel,#gaza,#palestine,#israelhamaswar,#israelhamas,#freepalestine,#netanyahu,#therealimage,#israelmusicfestival,#crisisactors AND #palestine,#crisisactors AND #gaza,#crisisactors AND #israel,#crisisactors AND #israelpalestine'}, {'name': 'keywords_tiktok', 'default': '', 'value': 'Alshifa,Rocket R9X,alshifahospital,command center,al shifa hospital,tunnels,hostage,October 7,weapons,hollahoax'}, {'name': 'keywords_yt', 'default': '', 'value': 'israel,pallywood'}, {'name': 'run_id', 'default': '', 'value': '{{job.run_id}}'}, {'name': 'start_date', 'default': '', 'value': '2023-11-23'}, {'name': 'test_flag', 'default': '', 'value': 'False'}, {'name': 'urls_tiktok', 'default': '', 'value': ''}, {'name': 'urls_yt', 'default': '', 'value': ''}, {'name': 'usernames_tiktok', 'default': '', 'value': ''}]}
+    # output_2 = {'job_id': 431843354010410, 'run_id': 689720909997032, 'creator_user_name': 'dhruv.s@logically.ai', 'number_in_job': 689720909997032, 'original_attempt_run_id': 689720909997032, 'state': {'life_cycle_state': 'TERMINATED', 'result_state': 'SUCCESS', 'state_message': '', 'user_cancelled_or_timedout': False}, 'overriding_parameters': {'notebook_params': {'hashtags_tiktok': 'russia', 'urls_tiktok': '', 'keywords_tiktok': '', 'usernames_tiktok': '', 'start_date': '2023-11-30', 'end_date': '2023-11-30', 'test_flag': 'True', 'keywords_yt': '', 'urls_yt': ''}}, 'start_time': 1701346859059, 'setup_duration': 0, 'execution_duration': 0, 'cleanup_duration': 0, 'end_time': 1701347354104, 'run_duration': 495045, 'trigger': 'ONE_TIME', 'run_name': 'MMAFC Short Video Search', 'run_page_url': 'https://7798644223489409.9.gcp.databricks.com/?o=7798644223489409#job/431843354010410/run/689720909997032', 'run_type': 'JOB_RUN', 'format': 'MULTI_TASK'}
+
+    # print(output_1['job_parameters']) 
+    # print(output_2['overriding_parameters'])
+
     return _corsify_actual_response(jsonify(output))
 
 
