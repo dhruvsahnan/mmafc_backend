@@ -8,6 +8,13 @@ DB_PERSONAL_ACCESS_TOKEN = os.getenv('db_pat')
 HOST_URL = os.getenv('db_url')
 SEARCH_JOB_ID = os.getenv('db_search_job')
 ANALYSIS_JOB_ID = os.getenv('db_analysis_job')
+OLD_SEARCH_JOB_ID = os.getenv('db_old_search_job')
+OLD_ANALYSIS_JOB_ID = os.getenv('db_old_analysis_job')
+
+JOB_ID_SWITCH = {
+    OLD_SEARCH_JOB_ID: SEARCH_JOB_ID,
+    OLD_ANALYSIS_JOB_ID: ANALYSIS_JOB_ID
+}
 
 # DB_PERSONAL_ACCESS_TOKEN = "dapi4f28951dddcde2d9fed9c564fdd9d2b9"
 # HOST_URL = "https://7798644223489409.9.gcp.databricks.com/"
@@ -119,7 +126,7 @@ def submit_job_run_request():
                     }
                     return _corsify_actual_response(jsonify(data_json))
         data_json = {
-            "job_id" : req_json['job_id'],
+            "job_id" : JOB_ID_SWITCH[req_json['job_id']],
             "notebook_params" : req_json['notebook_input']
         }
         response = requests.request(method="POST", headers=HEADERS, url=SUBMIT_JOB_RUN_API_ENDPOINT, json=data_json)
